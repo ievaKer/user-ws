@@ -19,24 +19,27 @@ public class SystemUser {
     @Column(nullable = false, unique = true)
     private String email;
     @Column(nullable = false)
-    private Integer age;
-    @Column(nullable = false)
-    private String country; // TODO: maybe use enum instead?
-    @Column(nullable = false)
     private String password;
     @CreationTimestamp
     private Date joinedOn;
+    private Integer age;
+    private String location;
+    private String name;
+    private String surname;
+    private String phoneNumber;
 
     @Override
     public String toString() {
-        return "User{" +
+        return "SystemUser{" +
                 "Id=" + Id +
                 ", username='" + username + '\'' +
                 ", email='" + email + '\'' +
-                ", age=" + age +
-                ", country='" + country + '\'' +
-                ", password='" + password + '\'' +
                 ", joinedOn=" + joinedOn +
+                ", age=" + age +
+                ", location='" + location + '\'' +
+                ", name='" + name + '\'' +
+                ", surname='" + surname + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
                 '}';
     }
 }
