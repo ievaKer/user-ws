@@ -1,7 +1,8 @@
 package lt.ieva.ws.user.controllers;
 
 import lombok.RequiredArgsConstructor;
-import lt.ieva.ws.user.controllers.beans.LoginUser;
+import lt.ieva.ws.user.controllers.beans.LoginResult;
+import lt.ieva.ws.user.controllers.beans.LoginCredentials;
 import lt.ieva.ws.user.controllers.beans.PublicUser;
 import lt.ieva.ws.user.database.models.SystemUser;
 import lt.ieva.ws.user.database.repositories.SystemUserRepository;
@@ -42,7 +43,7 @@ public class SystemUserController {
     public ResponseEntity<?> createUser(@Valid @RequestBody SystemUser user, Errors errors) {
         // Check if received user is valid
         if (errors.hasErrors()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Missing data.");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Missing data");
         }
 
         log.info("Create user: {}", user);
@@ -79,25 +80,45 @@ public class SystemUserController {
         return user.map(PublicUser::from).orElse(null);
     }
 
+    /**
+     * Endpoint to get all registered users.
+     * @return list of all registered public users
+     */
     @GetMapping("/users")
     public List<PublicUser> getAllUsers() {
         return userService.getAllPublic();
     }
 
+    /**
+     * Endpoint for user authentication.
+     * @param credentials for user login
+     * @param errors -
+     * @return response entity with login operation result (HTTP status 200)
+     */
     @PostMapping("/login")
-    public boolean loginUser(@RequestBody LoginUser user) {
-        return userService.authenticateUser(user);
+    public ResponseEntity<?> loginUser(@Valid @RequestBody LoginCredentials credentials, Errors errors) {
+        // Check if received user is valid
+        if (errors.hasErrors()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Missing data");
+        }
+
+        log.info("Request to login user: {}", credentials.getIdentifier());
+        boolean result = userService.authenticateUser(credentials);
+        return new ResponseEntity<>(new LoginResult(result), HttpStatus.OK);
     }
 
-    // TODO: needs implementation
     @DeleteMapping("/user/{id}")
-    public boolean deleteUser(@PathVariable String id) {
-        return false;
+    public void deleteUser(@PathVariable String id) {
+        throw new ResponseStatusException(HttpStatus.NOT_IMPLEMENTED);
     }
 
-    // TODO: needs implementation
+    @DeleteMapping("/users")
+    public void deleteUsers() {
+        throw new ResponseStatusException(HttpStatus.NOT_IMPLEMENTED);
+    }
+
     @PutMapping("/user")
-    public boolean updateUser() {
-        return false;
+    public void updateUser() {
+        throw new ResponseStatusException(HttpStatus.NOT_IMPLEMENTED);
     }
 }

@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.validation.constraints.NotNull;
+
 /**
  * A bean for user authentication.
  */
@@ -12,7 +14,9 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class LoginUser {
+public class LoginCredentials {
+    @NotNull
     private String password;
+    @NotNull
     private String identifier;
 }

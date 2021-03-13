@@ -1,7 +1,7 @@
 package lt.ieva.ws.user.database.services;
 
 import lombok.AllArgsConstructor;
-import lt.ieva.ws.user.controllers.beans.LoginUser;
+import lt.ieva.ws.user.controllers.beans.LoginCredentials;
 import lt.ieva.ws.user.controllers.beans.PublicUser;
 import lt.ieva.ws.user.database.models.SystemUser;
 import lt.ieva.ws.user.database.repositories.SystemUserRepository;
@@ -23,7 +23,7 @@ public class SystemUserService {
      * @param user to authenticate
      * @return true if authentication is successful, false otherwise
      */
-    public boolean authenticateUser(LoginUser user) {
+    public boolean authenticateUser(LoginCredentials user) {
         return userRepository.existsByEmailAndPassword(user.getIdentifier(), user.getPassword()) ||
                userRepository.existsByUsernameAndPassword(user.getIdentifier(), user.getPassword());
     }
