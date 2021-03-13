@@ -10,6 +10,9 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Class for managing processes associated with system users.
+ */
 @AllArgsConstructor
 @Service
 public class SystemUserService {
