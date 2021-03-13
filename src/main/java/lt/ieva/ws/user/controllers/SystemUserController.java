@@ -9,6 +9,7 @@ import lt.ieva.ws.user.database.repositories.SystemUserRepository;
 import lt.ieva.ws.user.database.services.SystemUserService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -136,14 +137,22 @@ public class SystemUserController {
         return new ResponseEntity<>(new LoginResult(result), HttpStatus.OK);
     }
 
+    /**
+     * Endpoint to delete user by id.
+     * @param id -
+     * @return empty response entity
+     */
     @DeleteMapping("/user/{id}")
-    public void deleteUser(@PathVariable String id) {
-        throw new ResponseStatusException(HttpStatus.NOT_IMPLEMENTED);
-    }
+    public ResponseEntity<?> deleteUser(@PathVariable Long id) {
+        log.info("Delete user with id {}", id);
 
-    @DeleteMapping("/users")
-    public void deleteUsers() {
-        throw new ResponseStatusException(HttpStatus.NOT_IMPLEMENTED);
+        try {
+            userRepository.deleteById(id);
+        } catch (DataAccessException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
+
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @PutMapping("/user")
