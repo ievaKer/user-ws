@@ -58,31 +58,60 @@ public class SystemUserController {
         }
     }
 
+    /**
+     * Endpoint to get user by id.
+     * @param id -
+     * @return public user instance
+     */
     @GetMapping("/user/{id}")
-    public PublicUser getUser(@PathVariable String id) {
+    public PublicUser getUser(@PathVariable Long id) {
         log.info("Requesting user with id {}", id);
-        Long userId = Long.parseLong(id);
-        Optional<SystemUser> user = userRepository.findById(userId);
-        return user.map(PublicUser::from).orElse(null);
+        Optional<SystemUser> user = userRepository.findById(id);
+
+        if (user.isPresent()) {
+            return PublicUser.from(user.get());
+        } else {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
     }
 
+    /**
+     * Endpoint to get user by username.
+     * @param username -
+     * @return public user instance
+     */
     @GetMapping("/user/username={username}")
     public PublicUser getUserByUsername(@PathVariable String username) {
         log.info("Requesting user with username {}", username);
         Optional<SystemUser> user = userRepository.findByUsername(username);
-        return user.map(PublicUser::from).orElse(null);
+
+        if (user.isPresent()) {
+            return PublicUser.from(user.get());
+        } else {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
     }
 
+    /**
+     * Endpoint to get user by email.
+     * @param email -
+     * @return public user instance
+     */
     @GetMapping("/user/email={email}")
     public PublicUser getUserByEmail(@PathVariable String email) {
         log.info("Requesting user with email {}", email);
         Optional<SystemUser> user = userRepository.findByEmail(email);
-        return user.map(PublicUser::from).orElse(null);
+
+        if (user.isPresent()) {
+            return PublicUser.from(user.get());
+        } else {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
     }
 
     /**
      * Endpoint to get all registered users.
-     * @return list of all registered public users
+     * @return list of public users
      */
     @GetMapping("/users")
     public List<PublicUser> getAllUsers() {
