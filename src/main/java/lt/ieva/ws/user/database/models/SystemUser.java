@@ -21,7 +21,7 @@ public class SystemUser {
      */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long Id;
+    private Long id;
     @CreationTimestamp
     private Date joinedOn;
 
@@ -50,7 +50,7 @@ public class SystemUser {
     @Override
     public String toString() {
         return "SystemUser{" +
-                "Id=" + Id +
+                "Id=" + id +
                 ", username='" + username + '\'' +
                 ", email='" + email + '\'' +
                 ", joinedOn=" + joinedOn +

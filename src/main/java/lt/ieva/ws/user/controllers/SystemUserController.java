@@ -4,11 +4,13 @@ import lombok.RequiredArgsConstructor;
 import lt.ieva.ws.user.controllers.beans.LoginResult;
 import lt.ieva.ws.user.controllers.beans.LoginCredentials;
 import lt.ieva.ws.user.controllers.beans.PublicUser;
+import lt.ieva.ws.user.controllers.beans.UpdateUser;
 import lt.ieva.ws.user.database.models.SystemUser;
 import lt.ieva.ws.user.database.repositories.SystemUserRepository;
 import lt.ieva.ws.user.database.services.SystemUserService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.hibernate.engine.jdbc.spi.SqlExceptionHelper;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
@@ -19,6 +21,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @RestController
@@ -155,8 +158,48 @@ public class SystemUserController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+    /**
+     * Endpoint to update user data.
+     * @param user data that will be uploaded to database
+     * @param id user id
+     * @return public user data of updated user entity (HTTP status 200)
+     */
+    @PutMapping("/user/{id}")
+    public ResponseEntity<?> updateUser(@RequestBody UpdateUser user, @PathVariable Long id) {
+        if (user.getId() != null && !id.equals(user.getId())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Specified user ids do not match");
+        }
+
+        SystemUser updated;
+        try {
+            updated = userService.updateUserById(id, user);
+        } catch (NoSuchElementException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        } catch (DataIntegrityViolationException e) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Unable to update instance due to constraint violation", e);
+        }
+
+        return new ResponseEntity<>(PublicUser.from(updated), HttpStatus.OK);
+    }
+
+    /**
+     * Endpoint to update user data.
+     * @param user data that will be uploaded to database (mandatory ID field)
+     * @return public user data of updated user entity (HTTP status 200)
+     */
     @PutMapping("/user")
-    public void updateUser() {
-        throw new ResponseStatusException(HttpStatus.NOT_IMPLEMENTED);
+    public ResponseEntity<?> updateUser(@RequestBody UpdateUser user) {
+        SystemUser updated;
+        try {
+            updated = userService.updateUser(user);
+        } catch (IllegalArgumentException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        } catch (NoSuchElementException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        } catch (DataIntegrityViolationException e) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Unable to update instance due to constraint violation", e);
+        }
+
+        return new ResponseEntity<>(PublicUser.from(updated), HttpStatus.OK);
     }
 }
