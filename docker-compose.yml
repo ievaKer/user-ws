@@ -9,7 +9,24 @@ services:
       POSTGRES_USER: "postgres"
       POSTGRES_PASSWORD: "e1Mna3i5WwHs0e7QVtfn"
       POSTGRES_DB: "ws_user"
-    ports:
-      - "5434:5432"
+    expose:
+      - "5432"
     volumes:
       - ./postgres:/var/lib/postgresql/data/
+
+  app:
+    image: ievaker/user-ws
+    container_name: user_ws_app
+    ports:
+      - 80:8080
+    restart: always
+    depends_on:
+      - database
+    working_dir: /usr/user-ws
+    command: java -jar user-ws.jar
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://database:5432/ws_user
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=e1Mna3i5WwHs0e7QVtfn
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+      - SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT=org.hibernate.dialect.PostgreSQLDialect
