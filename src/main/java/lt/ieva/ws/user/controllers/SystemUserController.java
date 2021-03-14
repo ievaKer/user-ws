@@ -1,8 +1,8 @@
 package lt.ieva.ws.user.controllers;
 
 import lombok.RequiredArgsConstructor;
-import lt.ieva.ws.user.controllers.beans.LoginResult;
 import lt.ieva.ws.user.controllers.beans.LoginCredentials;
+import lt.ieva.ws.user.controllers.beans.LoginResult;
 import lt.ieva.ws.user.controllers.beans.PublicUser;
 import lt.ieva.ws.user.controllers.beans.UpdateUser;
 import lt.ieva.ws.user.database.models.SystemUser;
@@ -10,7 +10,6 @@ import lt.ieva.ws.user.database.repositories.SystemUserRepository;
 import lt.ieva.ws.user.database.services.SystemUserService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.hibernate.engine.jdbc.spi.SqlExceptionHelper;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;

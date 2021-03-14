@@ -6,8 +6,6 @@ import lt.ieva.ws.user.controllers.beans.PublicUser;
 import lt.ieva.ws.user.controllers.beans.UpdateUser;
 import lt.ieva.ws.user.database.models.SystemUser;
 import lt.ieva.ws.user.database.repositories.SystemUserRepository;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
 
 import java.lang.reflect.Field;

@@ -1,0 +1,15 @@
+version: '3'
+
+services:
+  database:
+    container_name: user_ws_db
+    image: postgres:13
+    restart: always
+    environment:
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "e1Mna3i5WwHs0e7QVtfn"
+      POSTGRES_DB: "ws_user"
+    ports:
+      - "5434:5432"
+    volumes:
+      - ./postgres:/var/lib/postgresql/data/
