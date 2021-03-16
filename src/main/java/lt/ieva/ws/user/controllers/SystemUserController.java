@@ -30,7 +30,6 @@ public class SystemUserController {
     private final SystemUserRepository userRepository;
     private final SystemUserService userService;
 
-    // TODO: handle errors
     @GetMapping("/")
     public String home() {
         return "Welcome!";
@@ -42,7 +41,7 @@ public class SystemUserController {
      * @param errors -
      * @return response entity with the user information (HTTP status 201)
      */
-    @PostMapping("/user")
+    @PostMapping("/users")
     public ResponseEntity<?> createUser(@Valid @RequestBody SystemUser user, Errors errors) {
         // Check if received user is valid
         if (errors.hasErrors()) {
@@ -66,7 +65,7 @@ public class SystemUserController {
      * @param id -
      * @return public user instance
      */
-    @GetMapping("/user/{id}")
+    @GetMapping("/users/{id}")
     public PublicUser getUser(@PathVariable Long id) {
         log.info("Requesting user with id {}", id);
         Optional<SystemUser> user = userRepository.findById(id);
@@ -83,7 +82,7 @@ public class SystemUserController {
      * @param username -
      * @return public user instance
      */
-    @GetMapping("/user/username={username}")
+    @GetMapping("/users/username={username}")
     public PublicUser getUserByUsername(@PathVariable String username) {
         log.info("Requesting user with username {}", username);
         Optional<SystemUser> user = userRepository.findByUsername(username);
@@ -100,7 +99,7 @@ public class SystemUserController {
      * @param email -
      * @return public user instance
      */
-    @GetMapping("/user/email={email}")
+    @GetMapping("/users/email={email}")
     public PublicUser getUserByEmail(@PathVariable String email) {
         log.info("Requesting user with email {}", email);
         Optional<SystemUser> user = userRepository.findByEmail(email);
@@ -127,7 +126,7 @@ public class SystemUserController {
      * @param errors -
      * @return response entity with login operation result (HTTP status 200)
      */
-    @PostMapping("/login")
+    @PostMapping("/users/login")
     public ResponseEntity<?> loginUser(@Valid @RequestBody LoginCredentials credentials, Errors errors) {
         // Check if received user is valid
         if (errors.hasErrors()) {
@@ -144,7 +143,7 @@ public class SystemUserController {
      * @param id -
      * @return empty response entity
      */
-    @DeleteMapping("/user/{id}")
+    @DeleteMapping("/users/{id}")
     public ResponseEntity<?> deleteUser(@PathVariable Long id) {
         log.info("Delete user with id {}", id);
 
@@ -163,7 +162,7 @@ public class SystemUserController {
      * @param id user id
      * @return public user data of updated user entity (HTTP status 200)
      */
-    @PutMapping("/user/{id}")
+    @PutMapping("/users/{id}")
     public ResponseEntity<?> updateUser(@RequestBody UpdateUser user, @PathVariable Long id) {
         if (user.getId() != null && !id.equals(user.getId())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Specified user ids do not match");
@@ -186,7 +185,7 @@ public class SystemUserController {
      * @param user data that will be uploaded to database (mandatory ID field)
      * @return public user data of updated user entity (HTTP status 200)
      */
-    @PutMapping("/user")
+    @PutMapping("/users")
     public ResponseEntity<?> updateUser(@RequestBody UpdateUser user) {
         SystemUser updated;
         try {

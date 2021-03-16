@@ -12,6 +12,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -60,7 +61,7 @@ public class SystemUserService {
      */
     public SystemUser updateUserById(Long id, UpdateUser update) {
         Optional<SystemUser> optUser = userRepository.findById(id);
-        SystemUser user = optUser.orElseThrow();
+        SystemUser user = optUser.orElseThrow(NoSuchElementException::new);
 
         Method method;
         String methodName;
